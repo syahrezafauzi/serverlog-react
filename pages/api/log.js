@@ -1,31 +1,44 @@
 export default (req, res)=>{
-    res.writeHead(200, {
-        'Cache-Control': 'no-cache',
-        'Content-Type': 'text/event-stream',
-      });
-      res.write('data: Processing...');
-      /* https://github.com/expressjs/compression#server-sent-events
-        Because of the nature of compression this module does not work out of the box with
-        server-sent events. To compress content, a window of the output needs to be
-        buffered up in order to get good compression. Typically when using server-sent
-        events, there are certain block of data that need to reach the client.
-    
-        You can achieve this by calling res.flush() when you need the data written to
-        actually make it to the client.
-    */
-   var count = 0;
-      res.flush();
-      // setTimeout(() => {
-      //   res.write(`data: Processing${++count}...`);
-      //   res.flush();
-      // }, 1000);
+  let bunyan = require('bunyan');
+  let log = bunyan.createLogger({
+    name: "ServerLog",
+    stream: stream
+  });
 
-    setInterval(()=>{
-      res.write(`data: Processing${++count}...\n\n`);
-        res.flush();
-    }, 1000)
+  var method = req.method;
+  var body = req.body;
+  var stream = req.stream;
+
+  if(method == "GET"){
+    // stream.pipe(()=>{
+    //   console.log("hello world")
+    // });
+
+    // var count = 0;
+
+    res.writeHead(200, {
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'text/event-stream',
+    });
+    // req.pipe(stream).pipe(()=> {
+    //   res.write('test');
+    //   res.flush();
+    // })
+
+    // setInterval(()=>{
+    //   res.write(`data: Processing${++count}...\n\n`);
+    //   res.flush();
+    // }, 1000)
+  }else{
+    log.info("hello world")
+    res.send(200)
+  } 
 }
 
-// export default (req, res)=>{
-//     res.json({test: "ya"})
-// }
+function isEmpty(obj) {
+  for(var prop in obj) {
+      if(obj.hasOwnProperty(prop))
+          return false;
+  }
+  return JSON.stringify(obj) === JSON.stringify({});
+}
