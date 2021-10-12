@@ -16,8 +16,12 @@
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.17.2",
     "react-redux": "^7.2.5",
-    "swr": "^1.0.1"
+    "socket.io": "^4.2.0",
+    "socket.io-client": "^4.2.0",
+    "swr": "^1.0.1",
+    "through": "^2.3.8"
   },
   "devDependencies": {
     "eslint": "7.32.0",

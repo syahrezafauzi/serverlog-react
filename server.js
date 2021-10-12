@@ -20,6 +20,7 @@ var filename = newFile('log');
 var fullpath = path.join(dir, filename);
 let stream = fs.createWriteStream(fullpath);
 
+
 app.prepare().then(() => {
   createServer((req, res) => {
     // Be sure to pass `true` as the second argument to `url.parse`.
@@ -28,11 +29,39 @@ app.prepare().then(() => {
     const { pathname, query } = parsedUrl
 
     if (pathname === '/api/log') {
-      var stream = fs.createReadStream(fullpath);
-      // stream.pipe(()=> console.log("pipe"))
-      req.stream = stream;
+      
+      console.log('req.method:', req.method)
+      var read = fs.createReadStream(fullpath);
+      if(req.method == "GET"){
+        read.on('data', (chunk)=>{
+          console.log('ongoing')
+        })
+
+        // read
+        // .pipe(through((buf)=> {
+        //   this.emit('data', buf.toString())
+        // }))
+        // .pipe(res);
+        // stream.pipe(()=> console.log("pipe"))
+        // read.on('data', (chunk)=>{
+        //   console.log('akudisini')
+        //   // res.write('gila')
+        //   // res.flush();
+        // })
+        // read.on('error', (err)=>{
+        //   console.log(err)
+        // })
+
+        // console.log('GET path:', read.path)
+
+      }else{
+        console.log('stream.path:', stream.path)
+      }
+      
     }
 
+    req.ws = stream;
+    req.rs = read;
     handle(req, res, parsedUrl)
   }).listen(3000, (err) => {
     if (err) throw err
