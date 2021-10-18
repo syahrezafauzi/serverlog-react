@@ -9,50 +9,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export default (props) => {
     console.log('props:', props)
     const [text, setText] = useState(initialData)
-    const initialState = {
-      isRunning: false,
-      time: 0
-    };
-    function reducer(state, action) {
-      let newState;
-      
-      async function getFetch(path, callback){
-        fetch(path).then(res => res.json().then(data=> ({
-          data: data,
-          status: res.status
-        }))).then(res=> {
-          callback(res)
-        })
-      }
 
-      getFetch('/api/socket', (res)=>{
-        console.log('imhere3')
-        var data = res.data;
-        
-        // initialData => ([...initialData, ...data])
-        // console.log('initialData:', initialData)
-
-        // setText(initialData = [...initialData, ...data])
-        // const final = initialData = [...initialData, ...data];
-        setText(["a"])
-        // fn(final)
-      
-        initSocket();
-      })
-
-      switch (action.type) {
-        case 'increase':
-          newState = { counter: state.counter + 1 };
-          break;
-        case 'descrease':
-          newState = { counter: state.counter - 1 };
-          break;
-        default:
-          throw new Error();
-      }
-      return newState;
-    }
-    const [state, dispatch] = useReducer(reducer, initialState);
     const initSocket = (data)=>{
       socket.on('connect', () => {
             console.log('connect')
@@ -80,17 +37,32 @@ export default (props) => {
             console.log('disconnect')
           })
     }
-    // const fn = useCallback((data) => {
-    //   setText(data)
-    // }, [text]);
 
-    useEffect(()=>{}, [text]);
-    const action = {
-      type: 'ActionType'
-    };
-  useEffect(()=>{
-    dispatch(action)
-  }, []);
+    useEffect(()=>{
+      async function getFetch(path, callback){
+        fetch(path).then(res => res.json().then(data=> ({
+          data: data,
+          status: res.status
+        }))).then(res=> {
+          callback(res)
+        })
+      }
+
+      getFetch('/api/socket', (res)=>{
+        console.log('imhere3')
+        var data = res.data;
+        
+        // initialData => ([...initialData, ...data])
+        // console.log('initialData:', initialData)
+
+        // setText(initialData = [...initialData, ...data])
+        // const final = initialData = [...initialData, ...data];
+        setText(["a"])
+        // fn(final)
+      
+        // initSocket()  ;
+      })
+    }, [])
 
   const {register, handleSubmit} = useForm();
   const onSubmit = (d) =>{
