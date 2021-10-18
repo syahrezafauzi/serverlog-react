@@ -18,18 +18,22 @@ export default (req, res)=>{
     //   console.log("hello world")
     // });
 
-    read
-        // .pipe(through((buf)=> {
-        //   this.emit('data', buf.toString())
-        // }))
-        .pipe(res)
+    // var count = 0;
+    // read.on('data', (chunk)=>{
+    //   console.log(`haha: ${count++}`)
+    //   res.write(`coba: ${count}`)
+    //   res.flush();
+    // })
+    // console.log('req.path:', read.path)
+    
+    // read
+    //     // .pipe(through((buf)=> {
+    //     //   this.emit('data', buf.toString())
+    //     // }))
+    //     .pipe(res)
 
-    var count = 0;
-    read.on('data', (chunk)=>{
-      console.log(`haha: ${count++}`)
-      res.write(`coba: ${count}`)
-      res.flush();
-    })
+    read.pipe(res)
+
 
     // res.writeHead(200, {
     //   'Cache-Control': 'no-cache',

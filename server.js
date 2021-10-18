@@ -28,14 +28,15 @@ app.prepare().then(() => {
     const parsedUrl = parse(req.url, true)
     const { pathname, query } = parsedUrl
 
-    if (pathname === '/api/log') {
+    if (pathname === '/api/socket' || pathname === '/api/log') {
       
       console.log('req.method:', req.method)
       var read = fs.createReadStream(fullpath);
+
       if(req.method == "GET"){
-        read.on('data', (chunk)=>{
-          console.log('ongoing')
-        })
+        // read.on('data', (chunk)=>{
+        //   console.log('ongoing')
+        // })
 
         // read
         // .pipe(through((buf)=> {

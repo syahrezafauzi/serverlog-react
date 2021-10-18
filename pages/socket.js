@@ -1,51 +1,125 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useReducer } from 'react'
 import io from 'socket.io-client'
 import { useForm } from 'react-hook-form'
+import useSWR from 'swr';
 var socket = io()
+var initialData = [];
+const fetcher = (url) => fetch(url).then((res) => res.json())
 
-export default () => {
-    const [text, setText] = useState(["coba"])
-  useEffect(() => {
+export default (props) => {
+    console.log('props:', props)
+    const [text, setText] = useState(initialData)
+    const initialState = {
+      isRunning: false,
+      time: 0
+    };
+    function reducer(state, action) {
+      let newState;
       
-    fetch('/api/socket').finally(() => {
-        socket = io()
+      async function getFetch(path, callback){
+        fetch(path).then(res => res.json().then(data=> ({
+          data: data,
+          status: res.status
+        }))).then(res=> {
+          callback(res)
+        })
+      }
+
+      getFetch('/api/socket', (res)=>{
+        console.log('imhere3')
+        var data = res.data;
+        
+        // initialData => ([...initialData, ...data])
+        // console.log('initialData:', initialData)
+
+        // setText(initialData = [...initialData, ...data])
+        // const final = initialData = [...initialData, ...data];
+        setText(["a"])
+        // fn(final)
+      
+        initSocket();
+      })
+
+      switch (action.type) {
+        case 'increase':
+          newState = { counter: state.counter + 1 };
+          break;
+        case 'descrease':
+          newState = { counter: state.counter - 1 };
+          break;
+        default:
+          throw new Error();
+      }
+      return newState;
+    }
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const initSocket = (data)=>{
       socket.on('connect', () => {
-        console.log('connect')
-        socket.emit('hello')
-      })
-
-      socket.on('hello', data => {
-        console.log('hello', data)
-        console.log('data:', data)
-        setText([...text, data])
-      })
-
-      socket.on('a user connected', () => {
-        console.log('a user connected')
-      })
+            console.log('connect')
+            setText(data)
+          })
       
-      socket.on('new', (data) => {
-        setText([...text, data])
-      })
+          socket.on('hello', data => {
+            setText([...data, data])
+          })
+      
+          socket.on('data', data =>{
+            setText([...data, data])
+          })
+      
+          socket.on('a user connected', () => {
+            console.log('a user connected')
+          })
+          
+          socket.on('new', (data) => {
+            data = [...data, data]
+            setText(data)
+          })
+      
+          socket.on('disconnect', () => {
+            console.log('disconnect')
+          })
+    }
+    // const fn = useCallback((data) => {
+    //   setText(data)
+    // }, [text]);
 
-      socket.on('disconnect', () => {
-        console.log('disconnect')
-      })
-    })
-  }, []) // Added [] as useEffect filter so it will be executed only once, when component is mounted
+    useEffect(()=>{}, [text]);
+    const action = {
+      type: 'ActionType'
+    };
+  useEffect(()=>{
+    dispatch(action)
+  }, []);
 
   const {register, handleSubmit} = useForm();
   const onSubmit = (d) =>{
     // fetch('api/socket', {method: "POST", body: JSON.stringify(d)})
     socket.emit('new', d.message)
   }
+
+  const parse = (target)=>{
+    var result = target;
+    try{
+      result = JSON.parse(target).msg
+    }catch(ex){
+
+    }
+
+    if(!text) return;
+    return result;
+  }
+
+  console.log('text:', text)
   
   return (
       <React.Fragment>
         <h1>Socket.io</h1>
         <div key="author">
             {text && text.map((x)=> {
-                return (<ol>{x}</ol>);
+                const msg = parse(x)
+                console.log('msg:', msg)
+                return (<ol>{msg}</ol>);
             })}
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -55,3 +129,4 @@ export default () => {
       </React.Fragment>
   )
 }
+
