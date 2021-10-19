@@ -2,7 +2,8 @@ import { Server } from 'socket.io'
 const readline = require('readline');
 
 const ioHandler = async (req, res) => {
-  var socket = res.socket.server.io
+  var socket = req.socket;
+  if(socket == null) console.log('nullsocket')
     if(req.method == "GET"){
       // emitData(req.rs, null);
 
@@ -12,7 +13,6 @@ const ioHandler = async (req, res) => {
       // });
 
         if (!socket) {
-            console.log('*First use, starting socket.io')
             const io = new Server(res.socket.server)
             io.on('connection', socket => {
               socket.broadcast.emit('a user connected')
@@ -21,7 +21,6 @@ const ioHandler = async (req, res) => {
                 // socket.emit('hello', msg ?? " world!")
               })
               socket.on('new', msg =>{
-                  console.log('broadcast')
                 socket.broadcast.emit('new', msg)  
                 socket.local.emit('new', msg)  
               })
@@ -37,7 +36,7 @@ const ioHandler = async (req, res) => {
 
           var data = [];
           await readLine(req.rs, (x)=> {data =  [...data, x]});
-          console.log('data:', data)
+          // console.log('data:', data)
           // res.json(data)
           res.status(200).json(data)
           // req.rs.pipe(res)
@@ -50,7 +49,6 @@ const ioHandler = async (req, res) => {
         // console.log('socket:', socket)
         // console.log('req.body:', req.body)
         let message = req.body;
-        console.log('imherecuy')
         
         let bunyan = require('bunyan');
         let log = bunyan.createLogger({
@@ -58,20 +56,22 @@ const ioHandler = async (req, res) => {
           stream: req.ws
         });
         log.info(message)
-        console.log('cuy2')
+        
+        socket.local.emit('new', message)
+        res.send(200)
 
-        if (!socket){
-            console.log('here')
-            const io = new Server(res.socket.server)
-            io.on('connection', socket => {
-                socket.broadcast.emit('a user connected')
-                socket.broadcast.emit('new', message)
-            });
-        }else{
-          console.log('message:', message)
-          socket.local.emit('new', message)
-          res.send(200)
-        }
+        // if (!socket){
+        //     console.log('here')
+        //     const io = new Server(res.socket.server)
+        //     io.on('connection', socket => {
+        //         socket.broadcast.emit('a user connected')
+        //         socket.broadcast.emit('new', message)
+        //     });
+        // }else{
+        //   console.log('message:', message)
+        //   socket.local.emit('new', message)
+        //   res.send(200)
+        // }
     }
   
   res.end()
@@ -84,7 +84,6 @@ async function readLine(rs, callback){
   });
 
   for await (const line of rl) {
-    console.log('line:', line)
     callback(line)
   }
 }
@@ -93,8 +92,8 @@ function emitData(stream, socket, res){
   // console.log('stream:', stream)
   stream && readLine(stream, (x)=>{
     var obj = JSON.parse(x);
-    console.log('x:', obj)
-    socket.local.emit('new', obj.msg);
+    // fitur ini akan dikirim oleh socket sengaja dimatikan karena aplikasi fetch data dari ini on document ready
+    if(false) socket.local.emit('new', obj.msg);
   });
   // stream && stream.on('data', (chunk)=>{
   //   setInterval(()=>{

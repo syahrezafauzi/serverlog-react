@@ -7,12 +7,20 @@ var initialData = [];
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default (props) => {
-    console.log('props:', props)
+    // console.log('props:', props)
     const [text, setText] = useState(initialData)
-
+    console.log('initialData:', initialData)
     const populate = (data) =>{
-      if(typeof(data) == 'string') setText(initialData = [...initialData, data])
-      else setText(initialData = [...initialData, ...data])
+      console.log('onpopulate')
+      console.log('data:', data)
+      if(typeof(data) == 'string') {
+        console.log('populatestring')
+        setText(initialData = [...initialData, data])
+      }
+      else {
+        console.log('populatelese')
+        setText(initialData = [...initialData, ...data])
+      }
     }
 
     const initSocket = (onConnect)=>{
@@ -73,31 +81,38 @@ export default (props) => {
 
   const {register, handleSubmit} = useForm();
   const onSubmit = (d) =>{
-    // fetch('api/socket', {method: "POST", body: JSON.stringify(d)})
-    socket.emit('new', d.message)
+    fetch('api/socket', {method: "POST", body: JSON.stringify(d.message)})
+    // socket.emit('new', d.message)
   }
 
   const parse = (target)=>{
-    var result = target;
+    var result = null;
     try{
       result = JSON.parse(target).msg
     }catch(ex){
-
     }
 
-    if(!text) return;
     return result;
   }
 
-  console.log('text:', text)
+  // console.log('text:', text)
   
   return (
       <React.Fragment>
         <h1>Socket.io</h1>
         <div key="author">
             {text && text.map((x)=> {
-                const msg = parse(x)
+                var msg = x;
+                try{
+                  // console.log('x:', x)
+                  var _parse = parse(x)
+                  // console.log('_parse:', _parse)
+                  if(_parse) msg = _parse
+                }catch(ex){
+                  console.log(ex && ex.message)
+                }
                 console.log('msg:', msg)
+                // console.log('msg:', msg ? x : msg)
                 return (<ol>{msg}</ol>);
             })}
         </div>

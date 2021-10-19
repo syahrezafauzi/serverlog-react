@@ -19,20 +19,33 @@ let dirRead = `${process.cwd()}\\log-read\\`
 var filename = newFile('log');
 var fullpath = path.join(dir, filename);
 let stream = fs.createWriteStream(fullpath);
+let net = require('net');
+let _socket = null;
 
+
+
+function initSocket(server){
+  if(!_socket){
+    const io = require('socket.io')(server);
+    io.on('connection', client => {
+      _socket = io;
+      client.on('event', data => { /* … */ });
+      client.on('disconnect', () => { /* … */ });
+    });
+  }
+}
 
 app.prepare().then(() => {
-  createServer((req, res) => {
+  var server = createServer((req, res) => {
     // Be sure to pass `true` as the second argument to `url.parse`.
     // This tells it to parse the query portion of the URL.
     const parsedUrl = parse(req.url, true)
     const { pathname, query } = parsedUrl
 
     if (pathname === '/api/socket' || pathname === '/api/log') {
-      
       console.log('req.method:', req.method)
       var read = fs.createReadStream(fullpath);
-
+      req.socket = _socket;
       if(req.method == "GET"){
         // read.on('data', (chunk)=>{
         //   console.log('ongoing')
@@ -56,7 +69,7 @@ app.prepare().then(() => {
         // console.log('GET path:', read.path)
 
       }else{
-        console.log('stream.path:', stream.path)
+        // console.log('stream.path:', stream.path)
       }
       
     }
@@ -64,7 +77,10 @@ app.prepare().then(() => {
     req.ws = stream;
     req.rs = read;
     handle(req, res, parsedUrl)
-  }).listen(3000, (err) => {
+  })
+
+  initSocket(server);
+  server.listen(3000, (err) => {
     if (err) throw err
     console.log('iminserver')
     console.log('> Ready on http://localhost:3000')
