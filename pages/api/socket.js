@@ -68,6 +68,7 @@ const ioHandler = async (req, res) => {
                 socket.broadcast.emit('new', message)
             });
         }else{
+          console.log('message:', message)
           socket.local.emit('new', message)
           res.send(200)
         }
@@ -91,8 +92,9 @@ async function readLine(rs, callback){
 function emitData(stream, socket, res){
   // console.log('stream:', stream)
   stream && readLine(stream, (x)=>{
-    console.log('x:', x)
-    socket.local.emit('new', x);
+    var obj = JSON.parse(x);
+    console.log('x:', obj)
+    socket.local.emit('new', obj.msg);
   });
   // stream && stream.on('data', (chunk)=>{
   //   setInterval(()=>{

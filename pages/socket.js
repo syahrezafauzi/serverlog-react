@@ -10,32 +10,38 @@ export default (props) => {
     console.log('props:', props)
     const [text, setText] = useState(initialData)
 
-    const initSocket = (data)=>{
+    const populate = (data) =>{
+      if(typeof(data) == 'string') setText(initialData = [...initialData, data])
+      else setText(initialData = [...initialData, ...data])
+    }
+
+    const initSocket = (onConnect)=>{
       socket.on('connect', () => {
-            console.log('connect')
-            setText(data)
-          })
+            // console.log('connect')
+            // setText(data)
+            onConnect();
+      })
       
-          socket.on('hello', data => {
-            setText([...data, data])
-          })
+      socket.on('hello', data => {
+        populate(data)
+      })
+  
+      socket.on('data', data =>{
+        populate(data)
+      })
+  
+      socket.on('a user connected', () => {
+        console.log('a user connected')
+      })
       
-          socket.on('data', data =>{
-            setText([...data, data])
-          })
-      
-          socket.on('a user connected', () => {
-            console.log('a user connected')
-          })
-          
-          socket.on('new', (data) => {
-            data = [...data, data]
-            setText(data)
-          })
-      
-          socket.on('disconnect', () => {
-            console.log('disconnect')
-          })
+      socket.on('new', (data) => {
+        console.log('data new:', data)
+        populate(data)
+      })
+  
+      socket.on('disconnect', () => {
+        console.log('disconnect')
+      })
     }
 
     useEffect(()=>{
@@ -48,20 +54,21 @@ export default (props) => {
         })
       }
 
-      getFetch('/api/socket', (res)=>{
-        console.log('imhere3')
-        var data = res.data;
-        
-        // initialData => ([...initialData, ...data])
-        // console.log('initialData:', initialData)
-
-        // setText(initialData = [...initialData, ...data])
-        // const final = initialData = [...initialData, ...data];
-        setText(["a"])
-        // fn(final)
+      initSocket(()=>{
+        getFetch('/api/socket', (res)=>{
+          console.log('imhere3')
+          console.log('data:', data)
+          var data = res.data;
+          
+          // initialData => ([...initialData, ...data])
+          // console.log('initialData:', initialData)
+  
+          setText(initialData = [...initialData, ...data])
+          // const final = initialData = [...initialData, ...data];
+          // setText(["a"])
+        })
+      });
       
-        // initSocket()  ;
-      })
     }, [])
 
   const {register, handleSubmit} = useForm();
