@@ -57,7 +57,8 @@ const ioHandler = async (req, res) => {
         });
         log.info(message)
         
-        socket.local.emit('new', message)
+        // socket.local.emit('new', message)
+        socket.local.emit('new', JSON.stringify({time: new Date(), msg: message}))
         res.send(200)
 
         // if (!socket){
