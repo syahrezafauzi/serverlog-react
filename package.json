@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev2": "cross-env NODE_OPTIONS='--inspect' node server.js",
-    "dev": "cross-env NODE_OPTIONS='--inspect' next",
+    "dev": "cross-env NODE_OPTIONS='--inspect' node server.js",
+    "dev-min": "cross-env NODE_OPTIONS='--inspect' next",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
