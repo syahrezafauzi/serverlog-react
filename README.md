@@ -23,7 +23,7 @@ yarn dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Demo Video 
-[https://youtu.be/rw0f8BtfJ64](https://youtu.be/rw0f8BtfJ64)
+[https://youtu.be/rw0f8BtfJ64](https://youtu.be/rw0f8BtfJ64)\n
 [![Youtube](https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg)](https://www.youtube.com/embed/rw0f8BtfJ64)
 
 
