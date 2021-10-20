@@ -24,7 +24,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Demo Video 
 <div align="center">
-  <a target="_blank" href="https://www.youtube.com/watch?v=rw0f8BtfJ64"><img src="https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg" alt="IMAGE ALT TEXT"></a>
+  <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=rw0f8BtfJ64"><img src="https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg" alt="IMAGE ALT TEXT"></a>
 </div>
 
 ## Project Info
