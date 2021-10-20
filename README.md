@@ -5,7 +5,7 @@ Github: https://github.com/syahrezafauzi
 
 ## Getting Started
 
-First install dependencies, only first run
+First install dependencies, only once at first run
 ```
 yarn install
 ```
