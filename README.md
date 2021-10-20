@@ -2,7 +2,6 @@
 Author: Syahreza Fauzi <zauzi.office@gmail.com>
 Date: 20 October 2021
 Github: https://github.com/syahrezafauzi
-Install Tutorial + Demo: https://youtu.be/rw0f8BtfJ64
 
 ## Getting Started
 
@@ -24,7 +23,7 @@ yarn dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Demo Video 
-[![Youtube](https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg)](https://youtu.be/rw0f8BtfJ64)
+[![Youtube](https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg)](http://www.youtube.com/watch?v=rw0f8BtfJ64)
 
 ## Project Info
 - React - [Next.js] (https://nextjs.org/)
