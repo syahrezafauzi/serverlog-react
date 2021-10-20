@@ -25,7 +25,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Demo Video 
 <p align="center"> https://youtu.be/rw0f8BtfJ64<br /> </p>
 
-[![Youtube](https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg)](https://www.youtube.com/embed/rw0f8BtfJ64)
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/rw0f8BtfJ64" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
 
 
 ## Project Info
