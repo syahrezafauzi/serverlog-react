@@ -23,17 +23,9 @@ yarn dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Demo Video 
-<p align="center"> https://youtu.be/rw0f8BtfJ64<br /> </p>
-
 <div align="center">
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/rw0f8BtfJ64" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe>  
+  <a href="https://www.youtube.com/watch?v=rw0f8BtfJ64"><img src="https://img.youtube.com/vi/rw0f8BtfJ64/0.jpg" alt="IMAGE ALT TEXT"></a>
 </div>
-
-
 
 ## Project Info
 - React - [Next.js] (https://nextjs.org/)
